@@ -2,6 +2,12 @@
 
 Dashboard ini dibuat menggunakan **Streamlit** untuk menganalisis data transaksi, produk, dan pelanggan. Aplikasi ini menyediakan visualisasi data yang interaktif dan informatif, seperti jumlah pesanan harian, jumlah produk terjual per kategori, dan jumlah pelanggan per negara bagian.
 
+### **URL Aksesk**
+```bash
+
+https://submission-visualisasi-data.streamlit.app/
+```
+
 ## 🚀 Fitur Utama
 1. **Visualisasi Jumlah Pesanan Harian**
    - Menampilkan jumlah pesanan per hari dalam bentuk diagram garis.
