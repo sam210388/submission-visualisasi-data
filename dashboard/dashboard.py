@@ -10,6 +10,16 @@ sns.set(style='dark')
 def load_data(file_path):
     return pd.read_csv(file_path)
 
+#membuat fungsi untuk review score
+def create_review_distribution(df):
+    if "review_score" not in df.columns:
+        raise ValueError("Kolom 'review_score' tidak ditemukan di DataFrame.")
+    
+    # Menghitung distribusi review berdasarkan skor
+    review_distribution = df["review_score"].value_counts(normalize=True).reset_index()
+    review_distribution.columns = ["review_score", "proportion"]
+    return review_distribution
+
 # Fungsi untuk membuat daily orders DataFrame
 def create_daily_orders_df(df):
     if df.index.name != "order_purchase_timestamp":
@@ -53,6 +63,7 @@ try:
     products_dataset_df = load_data("dashboard/products_dataset.csv") 
     order_items_dataset_df = load_data("dashboard/order_items_dataset_df.csv")
     order_dataset_df = load_data("dashboard/orders_dataset.csv")
+    order_reviews_df = load_data("dashboard/order_reviews_dataset.csv")
 except FileNotFoundError as e:
     st.error(f"File tidak ditemukan: {e}")
     st.stop()
@@ -93,6 +104,19 @@ if 'customer_id' in order_product_combine.columns and 'customer_id' in customer_
     )
 else:
     print("Kolom 'customer_id' tidak ditemukan di salah satu DataFrame.")
+
+# menggabungkan order_product_customer_combine dengan review
+if 'order_id' in order_product_combine.columns and 'order_id' in order_reviews_df.columns:
+    # Menggabungkan kedua dataset
+    order_product_customer_combine = pd.merge(
+        order_product_customer_combine,
+        order_reviews_df,
+        on='order_id',  # Kolom kunci yang digunakan untuk penggabungan
+        how='left'      # Menggunakan join 'left'
+    )
+else:
+    print("Kolom 'order_id' tidak ditemukan di salah satu DataFrame.")
+
 
 # Konversi kolom datetime
 order_product_customer_combine_columns = ['order_purchase_timestamp', 'order_approved_at', 'order_delivered_customer_date', 'order_estimated_delivery_date']
@@ -163,12 +187,15 @@ daily_orders_df = create_daily_orders_df(main_df)
 sum_orders_items_df = create_sum_order_item_df(main_df)
 bystate_df = create_bystate_df(main_df)
 
+# membuat agregasi review score
+if "review_score" in main_df.columns:
+    review_distribution = create_review_distribution(main_df)
+else:
+    st.warning("Kolom 'review_score' tidak ditemukan dalam dataset.")
+    review_distribution = None
+
 # Header dan visualisasi dashboard
 st.header('Dashboard Data')
-
-# Visualisasi daily orders
-st.subheader("Daily Orders")
-st.line_chart(daily_orders_df.set_index("order_purchase_timestamp")["order_count"])
 
 # Visualisasi by state
 st.subheader("Orders by State")
@@ -185,3 +212,26 @@ ax.set_title("Jumlah Produk Terjual per Kategori", fontsize=14)
 ax.set_xlabel("Jumlah Produk", fontsize=12)
 ax.set_ylabel("Kategori Produk", fontsize=12)
 st.pyplot(fig)
+
+# Visualisasi daily orders
+st.subheader("Daily Orders")
+st.line_chart(daily_orders_df.set_index("order_purchase_timestamp")["order_count"])
+
+# Visualisasi Order Review
+if review_distribution is not None:
+    st.subheader("Proporsi Review Pelanggan")
+    
+    fig, ax = plt.subplots()
+    ax.pie(
+        review_distribution["proportion"], 
+        labels=review_distribution["review_score"], 
+        autopct='%1.1f%%', 
+        startangle=90, 
+        colors=sns.color_palette("pastel")[0:len(review_distribution)]
+    )
+    ax.set_title("Distribusi Review Pelanggan", fontsize=14)
+    st.pyplot(fig)
+
+
+
+
