@@ -28,4 +28,60 @@ Pastikan Anda telah menginstal:
 Clone project ini ke komputer Anda:
 ```bash
 git clone https://github.com/sam210388/submission-visualisasi-data.git
-cd ubmission-visualisasi-data
+cd submission-visualisasi-data
+
+```
+
+### 3. **Instalasi**
+
+Install semua library yang dibutuhkan menggunakan requirements.txt:
+
+```bash
+
+pip install -r requirements.txt
+
+```
+
+### 4. **Menjalankan Aplikasi**
+Gunakan perintah berikut untuk menjalankan aplikasi Streamlit:
+
+```bash
+
+streamlit run lokasi_folder_anda/dashboard.py
+
+```
+
+ganti lokasi_folder_anda sesuai lokasi anda meletakan folder project
+
+### 4. **Struktur FIle**
+```bash
+├──submission-visualisasi-data/
+   ├── dashboard
+      ├── dashboard.py                   # Funtuk menjalankan Streamlit
+      ├── customer_dataset.csv           # Dataset pelanggan
+      ├── order_items_dataset_df.csv     # Dataset detail item
+      ├── products_dataset.csv           # Dataset produk
+      ├── order_dataset.csv              # Dataset detail item
+   ├── data-project-visualisasi
+      ├── customer_dataset.csv           # Dataset pelanggan
+      ├── geolocation_dataset.csv        # Dataset geolokasi
+      ├── order_items_dataset.csv        # Dataset detail item
+      ├── order_payments_dataset.csv     # Dataset Pembayaran
+      ├── order_reviews_dataset.csv      # Dataset Review
+      ├── order_dataset.csv              # Dataset Orders
+      ├── product_category_name.csv      # Dataset Kategori Produk
+      ├── products_dataset.csv           # Dataset Produk
+      ├── sellers_dataset.csv            # Dataset Penjual
+   ├── requirements.txt                  # Dependencies
+   ├── README.md                         # Dokumentasi ini
+   ├── LICENSE                           # Lisensi Aplikasi
+   ├── Proyek_Analisis_data_SAM.ipynb    # Lisensi Aplikasi
+
+```
+
+### 5. **📧 Kontak**
+Jika ada pertanyaan, Anda dapat menghubungi:
+
+Nama: Nama Anda
+Email: emailanda@example.com
+
