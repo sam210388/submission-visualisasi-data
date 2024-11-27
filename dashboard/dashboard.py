@@ -49,11 +49,10 @@ def create_bystate_df(df):
 
 # Memuat dataset
 try:
-    customer_dataset_df = load_data("customer_dataset_df.csv")
-    products_dataset_df = load_data("products_dataset.csv")
-    #df_merged_order = load_data("df_merged_order.csv")
-    order_items_dataset_df = load_data("order_items_dataset_df.csv")
-    order_dataset_df = load_data("orders_dataset.csv")
+    customer_dataset_df = load_data("dashboard/customers_dataset.csv")
+    products_dataset_df = load_data("dashboard/products_dataset.csv") 
+    order_items_dataset_df = load_data("dashboard/order_items_dataset_df.csv")
+    order_dataset_df = load_data("dashboard/orders_dataset.csv")
 except FileNotFoundError as e:
     st.error(f"File tidak ditemukan: {e}")
     st.stop()
@@ -120,6 +119,22 @@ with st.sidebar:
         label='Rentang Waktu', min_value=min_date, max_value=max_date, value=[min_date, max_date]
     )
 
+    # Filter negara bagian
+    opsi_negara_bagian = order_product_customer_combine['customer_state'].dropna().unique()
+    selected_states = st.multiselect(
+        label="Pilih Negara Bagian",
+        options=opsi_negara_bagian,
+        default=opsi_negara_bagian  # Default semua negara bagian
+    )
+    
+    # Filter kategori produk
+    opsi_kategori = order_product_customer_combine['product_category_name'].dropna().unique()
+    selected_categories = st.multiselect(
+        label="Pilih Kategori Produk",
+        options=opsi_kategori,
+        default=opsi_kategori  # Default semua kategori produk
+    )
+
 # Validasi rentang tanggal
 start_date = pd.to_datetime(start_date)
 end_date = pd.to_datetime(end_date)
@@ -130,8 +145,11 @@ if start_date < min_date or end_date > max_date:
 # Filter data berdasarkan rentang waktu
 main_df = order_product_customer_combine[
     (order_product_customer_combine["order_purchase_timestamp"] >= start_date) &
-    (order_product_customer_combine["order_purchase_timestamp"] <= end_date)
+    (order_product_customer_combine["order_purchase_timestamp"] <= end_date) &
+    (order_product_customer_combine["customer_state"].isin(selected_states)) &
+    (order_product_customer_combine["product_category_name"].isin(selected_categories))
 ]
+
 
 if main_df.empty:
     st.warning("Tidak ada data untuk rentang waktu yang dipilih.")
