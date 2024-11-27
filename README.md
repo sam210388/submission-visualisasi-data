@@ -82,6 +82,6 @@ ganti lokasi_folder_anda sesuai lokasi anda meletakan folder project
 ### 5. **📧 Kontak**
 Jika ada pertanyaan, Anda dapat menghubungi:
 
-Nama: Nama Anda
-Email: emailanda@example.com
+- Nama: Nama Anda
+- Email: emailanda@example.com
 
